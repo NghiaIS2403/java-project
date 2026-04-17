@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechZone – Cửa Hàng Điện Tử Cao Cấp</title>
+  <meta name="description" content="TechZone – Mua sắm điện tử chính hãng, giá tốt nhất. iPhone, Samsung, Laptop, Tai nghe và nhiều hơn nữa." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="brand-icon">⚡</div>
+    Tech<span>Zone</span>
+  </a>
+  <div class="search-bar" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">🏠 Trang chủ</a></li>
+    <li><a href="index.html#products">📦 Sản phẩm</a></li>
+    <li><a href="orders.html">📋 Đơn hàng</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-icon" onclick="toggleCart()" title="Giỏ hàng">
+      🛒 <span class="badge cart-badge" style="display:none">0</span>
+    </button>
+    <div id="navUser"></div>
+  </div>
+</nav>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="font-size:1.1rem;font-weight:700;">🛒 Giỏ hàng</h3>
+      <button class="modal-close" onclick="toggleCart()">✕</button>
+    </div>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-footer" id="cartFooter"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="floating-badge">⚡ Flash Sale – Giảm đến 40%</div>
+  <h1 class="hero-title">Công Nghệ <span class="highlight">Đỉnh Cao</span><br/>Giá Siêu Tốt</h1>
+  <p class="hero-subtitle">Khám phá hàng nghìn sản phẩm điện tử chính hãng với giá tốt nhất thị trường. Bảo hành chính hãng 12-24 tháng.</p>
+  <div class="hero-actions">
+    <a href="#products" class="btn btn-primary btn-lg">🛒 Mua ngay</a>
+    <a href="#categories" class="btn btn-secondary btn-lg">📱 Xem danh mục</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">10K+</div><div class="hero-stat-label">Sản phẩm</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">50K+</div><div class="hero-stat-label">Khách hàng</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">99%</div><div class="hero-stat-label">Hài lòng</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">24/7</div><div class="hero-stat-label">Hỗ trợ</div></div>
+  </div>
+</section>
+
+<!-- FEATURES BAR -->
+<section class="section" style="padding-top:0">
+  <div class="features-bar">
+    <div class="feature-item"><div class="feature-icon">🚚</div><div class="feature-title">Giao hàng nhanh</div><div class="feature-desc">Nhanh trong 2-4 giờ</div></div>
+    <div class="feature-item"><div class="feature-icon">🛡️</div><div class="feature-title">Bảo hành chính hãng</div><div class="feature-desc">12-24 tháng</div></div>
+    <div class="feature-item"><div class="feature-icon">💳</div><div class="feature-title">Thanh toán an toàn</div><div class="feature-desc">Đa dạng hình thức</div></div>
+    <div class="feature-item"><div class="feature-icon">🔄</div><div class="feature-title">Đổi trả 30 ngày</div><div class="feature-desc">Không cần lý do</div></div>
+  </div>
+</section>
+
+<!-- BANNERS -->
+<section class="section" style="padding-top:0">
+  <div class="banner-grid">
+    <div class="banner-card banner-card-purple">
+      <div class="banner-card-content">
+        <div class="banner-card-tag">Flash Sale</div>
+        <div class="banner-card-title">iPhone 15 Pro</div>
+        <div class="banner-card-sub">Giảm đến 5 triệu đồng</div>
+        <a href="#products" class="btn btn-primary btn-sm">Mua ngay</a>
+      </div>
+      <div class="banner-emoji">📱</div>
+    </div>
+    <div class="banner-card banner-card-cyan">
+      <div class="banner-card-content">
+        <div class="banner-card-tag">Mới về</div>
+        <div class="banner-card-title">MacBook Air M3</div>
+        <div class="banner-card-sub">Chip mạnh mẽ nhất từ Apple</div>
+        <a href="#products" class="btn btn-primary btn-sm">Khám phá</a>
+      </div>
+      <div class="banner-emoji">💻</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div id="categories"></div>
+  <div class="section-header">
+    <h2 class="section-title">Sản phẩm <span>nổi bật</span></h2>
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+      <select class="form-control" id="sortSelect" style="width:auto;padding:8px 12px;" onchange="renderProducts()">
+        <option value="">Sắp xếp</option>
+        <option value="price-asc">Giá tăng dần</option>
+        <option value="price-desc">Giá giảm dần</option>
+        <option value="rating">Đánh giá cao</option>
+        <option value="new">Mới nhất</option>
+      </select>
+    </div>
+  </div>
+  <div class="category-tabs" id="catTabs"></div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Tech<span>Zone</span> ⚡</div>
+      <p class="footer-desc">Cửa hàng điện tử uy tín hàng đầu Việt Nam. Chất lượng chính hãng, giá cả cạnh tranh, dịch vụ tận tâm.</p>
+      <div class="social-links" style="margin-top:1rem">
+        <a class="social-link" href="#">📘</a>
+        <a class="social-link" href="#">📷</a>
+        <a class="social-link" href="#">▶️</a>
+        <a class="social-link" href="#">💬</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Sản phẩm</div>
+      <ul class="footer-links">
+        <li><a href="#">Điện thoại</a></li><li><a href="#">Laptop</a></li>
+        <li><a href="#">Tai nghe</a></li><li><a href="#">Đồng hồ</a></li>
+        <li><a href="#">TV & Âm thanh</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Hỗ trợ</div>
+      <ul class="footer-links">
+        <li><a href="#">Chính sách đổi trả</a></li><li><a href="#">Bảo hành</a></li>
+        <li><a href="#">Thanh toán</a></li><li><a href="#">Vận chuyển</a></li>
+        <li><a href="#">Liên hệ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Liên hệ</div>
+      <ul class="footer-links">
+        <li><a href="#">📍 123 Nguyễn Huệ, Q1, TP.HCM</a></li>
+        <li><a href="#">📞 1800 6818</a></li>
+        <li><a href="#">✉️ support@techzone.vn</a></li>
+        <li><a href="#">🕐 8:00 – 22:00 mỗi ngày</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 TechZone. All rights reserved.</span>
+    <span>🇻🇳 Made in Vietnam</span>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+let activeCategory = 'Tất cả';
+
+function buildNavUser() {
+  const el = document.getElementById('navUser');
+  if (Auth.isLoggedIn()) {
+    const u = Auth.currentUser;
+    const initial = u.name.charAt(0).toUpperCase();
+    el.innerHTML = `
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" onclick="toggleUserMenu()">${initial}</div>
+        <div class="user-dropdown">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);margin-bottom:4px;">
+            <div style="font-weight:600;font-size:0.9rem">${u.name}</div>
+            <div style="font-size:0.78rem;color:var(--text-secondary)">${u.email}</div>
+          </div>
+          <a class="dropdown-item" href="orders.html">📋 Đơn hàng của tôi</a>
+          ${Auth.isAdmin() ? '<a class="dropdown-item" href="admin.html">🛠️ Quản lý admin</a>' : ''}
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" onclick="handleLogout()">🚪 Đăng xuất</button>
+        </div>
+      </div>`;
+  } else {
+    el.innerHTML = `<a href="login.html" class="btn btn-primary btn-sm">Đăng nhập</a>`;
+  }
+}
+
+function toggleUserMenu() {
+  document.getElementById('userMenu')?.classList.toggle('active');
+}
+
+function handleLogout() {
+  Auth.logout();
+  Cart.clear();
+  toast('Đã đăng xuất!', 'info');
+  setTimeout(() => location.reload(), 500);
+}
+
+function buildCatTabs() {
+  const tabs = document.getElementById('catTabs');
+  tabs.innerHTML = DB.categories.map(cat => `
+    <button class="cat-tab ${cat === activeCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+  `).join('');
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  buildCatTabs();
+  renderProducts();
+}
+
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  activeCategory = 'Tất cả';
+  buildCatTabs();
+  renderProducts(q);
+  document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+function renderProducts(searchQ = '') {
+  const sort = document.getElementById('sortSelect').value;
+  let prods = [...DB.products];
+  if (activeCategory !== 'Tất cả') prods = prods.filter(p => p.category === activeCategory);
+  if (searchQ) prods = prods.filter(p => p.name.toLowerCase().includes(searchQ) || p.brand.toLowerCase().includes(searchQ) || p.category.toLowerCase().includes(searchQ));
+  if (sort === 'price-asc') prods.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') prods.sort((a,b) => b.price - a.price);
+  else if (sort === 'rating') prods.sort((a,b) => b.rating - a.rating);
+  const grid = document.getElementById('productsGrid');
+  if (!prods.length) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-secondary)">😢 Không tìm thấy sản phẩm</div>'; return; }
+  grid.innerHTML = prods.map(p => `
+    <div class="product-card" onclick="goProduct(${p.id})">
+      ${p.badge ? `<div class="product-badge badge-${p.badge}">${p.badge === 'sale' ? 'SALE' : p.badge === 'new' ? 'MỚI' : 'HOT'}</div>` : ''}
+      <div class="product-img">${p.emoji}</div>
+      <div class="product-info">
+        <div class="product-category">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-rating">
+          <span class="stars">${renderStars(p.rating)}</span>
+          <span class="rating-count">(${p.reviews.toLocaleString()})</span>
+        </div>
+        <div class="product-price">
+          <span class="price-current">${formatPrice(p.price)}</span>
+          ${p.oldPrice ? `<span class="price-old">${formatPrice(p.oldPrice)}</span>` : ''}
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();goProduct(${p.id})">Xem</button>
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();addToCart(${p.id})">🛒 Thêm</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function goProduct(id) {
+  location.href = `product-detail.html?id=${id}`;
+}
+
+function addToCart(id) {
+  Cart.add(id);
+  const p = DB.products.find(x => x.id === id);
+  toast(`Đã thêm "${p.name}" vào giỏ hàng! 🛒`, 'success');
+  renderCartSidebar();
+}
+
+// ===== CART SIDEBAR =====
+function toggleCart() {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('active');
+  renderCartSidebar();
+}
+
+function renderCartSidebar() {
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  if (!Cart.items.length) {
+    body.innerHTML = '<div class="empty-cart"><div class="empty-cart-icon">🛒</div><p>Giỏ hàng trống</p></div>';
+    footer.innerHTML = '';
+    return;
+  }
+  body.innerHTML = Cart.items.map(item => {
+    const p = DB.products.find(x => x.id === item.id);
+    if (!p) return '';
+    return `<div class="cart-item">
+      <div class="cart-item-img">${p.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-price">${formatPrice(p.price)}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+          <span class="qty-value">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${p.id})" title="Xóa">🗑️</button>
+    </div>`;
+  }).join('');
+  footer.innerHTML = `
+    <div class="cart-total">
+      <span class="cart-total-label">Tổng tiền:</span>
+      <span class="cart-total-price">${formatPrice(Cart.getTotal())}</span>
+    </div>
+    <a href="checkout.html" class="btn btn-primary" style="width:100%;justify-content:center">💳 Thanh toán ngay</a>`;
+}
+
+function changeQty(id, delta) {
+  const item = Cart.items.find(i => i.id === id);
+  if (item) Cart.setQty(id, item.qty + delta);
+  renderCartSidebar();
+}
+
+function removeFromCart(id) {
+  Cart.remove(id);
+  renderCartSidebar();
+}
+
+// INIT PAGE
+buildNavUser();
+buildCatTabs();
+renderProducts();
+Cart.updateBadge();
+</script>
+</body>
+</html>
