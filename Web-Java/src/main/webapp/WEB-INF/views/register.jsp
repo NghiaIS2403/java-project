@@ -7,7 +7,7 @@
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width,initial-scale=1.0" />
             <title>Đăng ký – TechZone</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css?v=2" />
             <style>
                 .auth-page {
                     min-height: 100vh;
@@ -86,6 +86,20 @@
         </head>
 
         <body>
+            <script>
+                if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-mode');
+                function toggleTheme() {
+                    document.documentElement.classList.toggle('dark-mode');
+                    const isDark = document.documentElement.classList.contains('dark-mode');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    const btn = document.getElementById('theme-toggle');
+                    if (btn) btn.innerHTML = isDark ? '🌞' : '🌙';
+                }
+            </script>
+            <button id="theme-toggle" class="btn-icon" onclick="toggleTheme()" title="Đổi giao diện"
+                style="position:fixed; top:20px; right:20px; z-index:1000;">
+                <script>document.write(localStorage.getItem('theme') === 'dark' ? '🌞' : '🌙')</script>
+            </button>
             <div class="auth-page">
                 <div class="auth-card">
                     <div class="auth-logo">

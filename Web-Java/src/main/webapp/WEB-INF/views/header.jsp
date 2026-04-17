@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <% com.techzone.model.User cu=(com.techzone.model.User) session.getAttribute("currentUser"); // Đếm giỏ hàng
-            java.util.List<?> cartSession = (java.util.List
-            <?>) session.getAttribute("cart");
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <% com.techzone.model.User cu=(com.techzone.model.User) session.getAttribute("currentUser"); // Đếm giỏ hàng
+      java.util.List<?> cartSession = (java.util.List
+      <?>) session.getAttribute("cart");
     int cartCount = 0;
     if (cartSession != null) {
         for (Object item : cartSession) {
@@ -12,6 +12,17 @@
     }
     String ctx = request.getContextPath();
 %>
+<script>
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark-mode');
+  }
+  function toggleTheme() {
+    document.documentElement.classList.toggle('dark-mode');
+    const isDark = document.documentElement.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    document.getElementById('theme-toggle').innerHTML = isDark ? '🌞' : '🌙';
+  }
+</script>
 <nav class="navbar">
   <a href="<%= ctx %>/" class="navbar-brand">
     <div class="brand-icon">⚡</div>
@@ -23,19 +34,26 @@
     <button type="submit">🔍</button>
   </form>
 
+  <button id="theme-toggle" class="btn-icon" onclick="toggleTheme()" title="Đổi giao diện" style="margin-left: 1rem;">
+    <script>document.write(localStorage.getItem('theme') === 'dark' ? '🌞' : '🌙')</script>
+  </button>
+
   <ul class="nav-links">
-    <li><a href="<%= ctx %>/">🏠 Trang chủ</a></li>
-    <li><a href="<%= ctx %>/?tab=products">📦 Sản phẩm</a></li>
+    <% if (cu == null || !cu.isAdmin()) { %>
+    <li><a href="<%= ctx %>/#products">📦 Sản phẩm</a></li>
     <% if (cu != null) { %>
     <li><a href="<%= ctx %>/orders">📋 Đơn hàng</a></li>
+    <% } %>
     <% } %>
   </ul>
 
   <div class="nav-actions">
+    <% if (cu == null || !cu.isAdmin()) { %>
     <a href="<%= ctx %>/cart" class="btn-icon" title="Giỏ hàng" style="text-decoration:none;display:flex;align-items:center;justify-content:center">
       🛒
       <% if (cartCount > 0) { %><span class="badge cart-badge"><%= cartCount %></span><% } %>
     </a>
+    <% } %>
 
     <% if (cu != null) { %>
     <div class="user-menu">

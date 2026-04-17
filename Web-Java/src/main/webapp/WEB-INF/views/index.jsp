@@ -10,7 +10,7 @@
                 <title>TechZone – Cửa Hàng Điện Tử Cao Cấp</title>
                 <meta name="description"
                     content="Mua sắm điện tử chính hãng, giá tốt nhất. iPhone, Laptop, Tai nghe và nhiều hơn nữa." />
-                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css?v=3" />
                 <link rel="icon"
                     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
             </head>
@@ -181,15 +181,30 @@
                                                     <a href="${pageContext.request.contextPath}/product?id=${p.id}"
                                                         class="btn btn-secondary btn-sm"
                                                         onclick="event.stopPropagation()">Xem</a>
-                                                    <form method="post" action="${pageContext.request.contextPath}/cart"
-                                                        style="flex:1" onclick="event.stopPropagation()">
-                                                        <input type="hidden" name="action" value="add" />
-                                                        <input type="hidden" name="productId" value="${p.id}" />
-                                                        <input type="hidden" name="redirect"
-                                                            value="${pageContext.request.contextPath}/" />
-                                                        <button type="submit" class="btn btn-primary btn-sm"
-                                                            style="width:100%">🛒 Thêm</button>
-                                                    </form>
+                                                    <c:choose>
+                                                        <c:when test="${not empty sessionScope.currentUser}">
+                                                            <%-- Logged in: show Add to Cart --%>
+                                                                <form method="post"
+                                                                    action="${pageContext.request.contextPath}/cart"
+                                                                    style="flex:1" onclick="event.stopPropagation()">
+                                                                    <input type="hidden" name="action" value="add" />
+                                                                    <input type="hidden" name="productId"
+                                                                        value="${p.id}" />
+                                                                    <input type="hidden" name="redirect"
+                                                                        value="${pageContext.request.contextPath}/" />
+                                                                    <button type="submit" class="btn btn-primary btn-sm"
+                                                                        style="width:100%">🛒 Thêm</button>
+                                                                </form>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <%-- Guest: redirect to login --%>
+                                                                <a href="${pageContext.request.contextPath}/login"
+                                                                    class="btn btn-primary btn-sm"
+                                                                    style="flex:1;justify-content:center"
+                                                                    onclick="event.stopPropagation()">🔑 Đăng nhập để
+                                                                    mua</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                             </div>
                                         </div>

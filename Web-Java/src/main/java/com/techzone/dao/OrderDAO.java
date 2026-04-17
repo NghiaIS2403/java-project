@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OrderDAO {
@@ -71,7 +72,10 @@ public class OrderDAO {
                 },
                 keyHolder);
 
-        int orderId = keyHolder.getKey().intValue();
+        Number key = keyHolder.getKey();
+        if (key == null)
+            throw new RuntimeException("Không thể tạo đơn hàng: DB không trả về ID.");
+        int orderId = key.intValue();
 
         String sqlItem = "INSERT INTO order_items (order_id, product_id, product_name, price, quantity) VALUES (?,?,?,?,?)";
         for (CartItem item : cartItems) {
@@ -108,5 +112,34 @@ public class OrderDAO {
         Long result = jdbcTemplate.queryForObject("SELECT SUM(total_amount) FROM orders WHERE status='delivered'",
                 Long.class);
         return result != null ? result : 0;
+    }
+
+    public long revenueThisMonth() {
+        Long result = jdbcTemplate.queryForObject(
+                "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE status='delivered' AND MONTH(created_at)=MONTH(CURDATE()) AND YEAR(created_at)=YEAR(CURDATE())",
+                Long.class);
+        return result != null ? result : 0;
+    }
+
+    public long revenueLastMonth() {
+        Long result = jdbcTemplate.queryForObject(
+                "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE status='delivered' AND MONTH(created_at)=MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH)) AND YEAR(created_at)=YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))",
+                Long.class);
+        return result != null ? result : 0;
+    }
+
+    public long ordersThisMonth() {
+        Long result = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM orders WHERE MONTH(created_at)=MONTH(CURDATE()) AND YEAR(created_at)=YEAR(CURDATE())",
+                Long.class);
+        return result != null ? result : 0;
+    }
+
+    public List<Map<String, Object>> getTopSellingProducts() {
+        return jdbcTemplate.queryForList(
+                "SELECT oi.product_name, SUM(oi.quantity) AS total_qty, SUM(oi.price * oi.quantity) AS total_revenue " +
+                        "FROM order_items oi JOIN orders o ON oi.order_id = o.id " +
+                        "WHERE o.status = 'delivered' " +
+                        "GROUP BY oi.product_name ORDER BY total_qty DESC LIMIT 5");
     }
 }

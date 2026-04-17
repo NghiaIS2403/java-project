@@ -34,7 +34,15 @@ public class AdminController {
         model.addAttribute("totalProducts", productDAO.count());
         model.addAttribute("totalOrders", orderDAO.count());
         model.addAttribute("totalUsers", userDAO.count());
-        model.addAttribute("totalRevenue", orderDAO.totalRevenue());
+
+        // Heavy stats only needed on dashboard
+        if ("dashboard".equals(tab)) {
+            model.addAttribute("totalRevenue", orderDAO.totalRevenue());
+            model.addAttribute("revenueThisMonth", orderDAO.revenueThisMonth());
+            model.addAttribute("revenueLastMonth", orderDAO.revenueLastMonth());
+            model.addAttribute("ordersThisMonth", orderDAO.ordersThisMonth());
+            model.addAttribute("topProducts", orderDAO.getTopSellingProducts());
+        }
 
         switch (tab) {
             case "products":
